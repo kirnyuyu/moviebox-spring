@@ -237,7 +237,7 @@
 </head>
 <body>
 
-	<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
+	<jsp:include page="../common/header.jsp"/>
 		
     <div id="wrap">
 
@@ -346,7 +346,7 @@
         </div>
     </div>
     
-	<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
+	<jsp:include page="../common/footer.jsp"/>
 
     	<script>
     		function openNoticePage(){
