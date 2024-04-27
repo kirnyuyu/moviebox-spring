@@ -11,21 +11,26 @@
 		<typeAlias type="com.kh.moviebox.member.model.vo.Member" alias="member"/>
 		<typeAlias type="com.kh.moviebox.common.model.vo.Genre" alias="genre"/>
 		<typeAlias type="com.kh.moviebox.common.model.vo.Attachment" alias="attachment"/>
+		
 		<typeAlias type="com.kh.moviebox.common.model.vo.Price" alias="price"/>
 		<typeAlias type="com.kh.moviebox.reservation.model.vo.Seat" alias="seat"/>
 		<typeAlias type="com.kh.moviebox.reservation.model.vo.Reservation" alias="reservation"/>
-		<typeAlias type="com.kh.moviebox.movie.model.vo.Movie" alias="movie"/>
-		<typeAlias type="com.kh.moviebox.board.model.vo.Answer" alias="answer"/>
-		<typeAlias type="com.kh.moviebox.board.model.vo.Board" alias="board"/>
+
 		<typeAlias type="com.kh.moviebox.board.model.vo.Category" alias="category"/>
+		
+		<typeAlias type="com.kh.moviebox.board.model.vo.Board" alias="board"/>
+		<typeAlias type="com.kh.moviebox.board.model.vo.Answer" alias="answer"/>
+		
 		<typeAlias type="com.kh.moviebox.notice.model.vo.Notice" alias="notice"/>
 
+		<typeAlias type="com.kh.moviebox.movie.model.vo.Movie" alias="movie"/>
 	</typeAliases>
 
 
 	<mappers>
 		<mapper resource="/mapper/member-mapper.xml"/>
 		<mapper resource="/mapper/notice-mapper.xml"/>
+		<mapper resource="/mapper/movie-mapper.xml"/>
 
 	</mappers>
 	

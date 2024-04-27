@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-<%@ page import="com.kh.movie.model.vo.*, java.util.ArrayList" %>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     
 <!DOCTYPE html>
@@ -188,7 +186,7 @@
     </style>
 </head>
 <body>
-	<jsp:include page="/views/common/header.jsp"></jsp:include>
+	<jsp:include page="../common/header.jsp"/>
     
     <div id="wrap">
         <div id="movie-list">
@@ -265,7 +263,7 @@
         </div> <!-- movie-list -->
     </div> <!-- wrap -->
     
-	<jsp:include page="/views/common/footer.jsp"></jsp:include>
+	<jsp:include page="../common/footer.jsp"/>
     
 </body>
 	
