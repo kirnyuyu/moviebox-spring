@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="noticeMapper">
+
+	<resultMap type="notice" id="noticeResultSet">
+		<result column="NOTICE_NO" 	   		property="noticeNo"/>
+		<result column="NOTICE_TITLE"   	property="noticeTitle"/>
+		<result column="NOTICE_WRITER"  	property="noticeWriter"/>
+		<result column="NOTICE_CONTENT" 	property="noticeContent"/>
+		<result column="CREATE_DATE" 		property="createDate"/>
+		<result column="COUNT"   			property="count"/>
+		<result column="STATUS"   			property="status"/>
+		<result column="CATEGORY_NAME"	property="noticeCategory"/>
+	</resultMap>
+	
+	<resultMap type="category" id="categoryResultSet">
+		<result column="CATEGORY_NO"	property="categoryNo"/>
+		<result column="CATEGORY_NAME"	property="categoryName"/>
+	</resultMap>
+
+	<select id="selectListCount" resultType="_int">
+		SELECT
+			  COUNT(*)
+		  FROM
+		  	  TB_NOTICE
+		 WHERE
+		 	  STATUS = 'Y'
+	</select>
+
+
+	<select id="selectList" resultMap="noticeResultSet">
+		SELECT
+              NOTICE_NO,
+              CATEGORY_NAME,
+              NOTICE_TITLE,
+              COUNT,
+              TO_CHAR(CREATE_DATE, 'YY/MM/DD') CREATE_DATE
+          FROM
+              TB_NOTICE
+          JOIN
+              TB_CATEGORY ON(NOTICE_CATEGORY = CATEGORY_NO)
+         WHERE
+              TB_NOTICE.STATUS = 'Y'
+         ORDER
+            BY
+              NOTICE_NO DESC
+	</select>
+	
+	
+	<update id="increaseCount" parameterType="_int">
+		UPDATE
+			  TB_NOTICE
+		   SET
+		   	  COUNT = COUNT + 1
+		 WHERE
+		 	  NOTICE_NO = #{noticeNo}
+		   AND
+		   	  STATUS = 'Y'
+	</update>
+	
+	<select id="selectNotice" parameterType="_int" resultMap="noticeResultSet">
+		SELECT
+			  NOTICE_NO,
+		      CATEGORY_NAME,
+		      NOTICE_TITLE,
+		      TO_CHAR(CREATE_DATE, 'YY/MM/DD') CREATE_DATE,
+		      COUNT,
+		      NOTICE_WRITER,
+		      NOTICE_CONTENT
+		  FROM
+		      TB_NOTICE
+		  JOIN
+		      TB_CATEGORY ON (NOTICE_CATEGORY = CATEGORY_NO)
+		  JOIN
+		      TB_MEMBER ON (MEMBER_NO = NOTICE_WRITER)
+		 WHERE
+		      NOTICE_NO = #{noticeNo}
+		   AND
+		      TB_NOTICE.STATUS = 'Y'
+	</select>
+	
+	
+	<insert id="insert" parameterType="notice">
+		INSERT
+		  INTO
+		  	  TB_NOTICE
+		  	  (
+		  	  NOTICE_NO,
+		  	  NOTICE_TITLE,
+		  	  NOTICE_WRITER,
+		  	  NOTICE_CONTENT,
+		  	  CREATE_DATE,
+		  	  NOTICE_CATEGORY
+		  	  )
+		VALUES
+			  (
+			  SEQ_NOTICENO.NEXTVAL,
+			  #{noticeTitle},
+			  #{noticeWriter},
+			  #{noticeContent},
+			  SYSDATE,
+			  #{noticeCategory}
+			  )
+	</insert>
+	
+	<select id="selectCategoryList" resultMap="categoryResultSet">
+		SELECT
+			  CATEGORY_NO,
+			  CATEGORY_NAME
+		  FROM
+		  	  TB_CATEGORY
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</mapper>

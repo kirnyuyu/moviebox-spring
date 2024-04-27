@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+  
+  
+<configuration>
+
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL"/>
+	</settings>
+
+	<typeAliases>
+		<typeAlias type="com.kh.moviebox.member.model.vo.Member" alias="member"/>
+		
+		<typeAlias type="com.kh.moviebox.board.model.vo.Answer" alias="answer"/>
+		<typeAlias type="com.kh.moviebox.board.model.vo.Board" alias="board"/>
+		<typeAlias type="com.kh.moviebox.board.model.vo.Category" alias="category"/>
+		
+		<typeAlias type="com.kh.moviebox.notice.model.vo.Notice" alias="notice"/>
+	</typeAliases>
+	
+	
+	<mappers>
+		<mapper resource="/mapper/member-mapper.xml"/>
+		<mapper resource="/mapper/notice-mapper.xml"/>
+	</mappers>
+
+</configuration>
