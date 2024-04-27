@@ -13,9 +13,29 @@
 		<result column="MOVIE_RELEASE" property="movieRelease"/>
 		<result column="MOVIE_STORY" property="movieStory"/>
 		<result column="GENRE_NO" property="genreNo"/>
+		<result column="GENRE_NAME" property="genreName"/>
 		<result column="DIRECTOR_NO" property="directorNo"/>
+		<result column="DIRECTOR_NAME" property="directorName"/>
 		<result column="MOVIE_UPDATE" property="movieUpdate"/>
+		<result column="FILE_PATH" property="filePath"/>
+		<result column="CHANGE_NAME" property="changeName"/>
 		<result column="TRAILER_VIDEO" property="trailerVideo"/>
+	</resultMap>
+	
+	
+	<resultMap type="cast" id="castResultSet">
+		<result column="MOVIE_NO" property="movieNo"/>
+		<result column="ACTOR_NO" property="actorNo"/>
+		<result column="ACTOR_NAME" property="actorName"/>
+	</resultMap>
+	
+	<resultMap type="attachment" id="attachResultSet">
+		<result column="FILE_NO" property="fileNo"/>
+		<result column="MOVIE_NO" property="movieNo"/>
+		<result column="ORIGIN_NAME" property="orginName"/>
+		<result column="CHANGE_NAME" property="changeName"/>
+		<result column="FILE_PATH" property="filePath"/>
+		<result column="FILE_LEVEL" property="fileLevel"/>
 	</resultMap>
 
 
@@ -65,4 +85,93 @@
 		       MOVIERATE DESC,
 		       MOVIE_RELEASE DESC
 	</select>
+	
+	
+	<!-- 장르 -->
+	<select id="genreMovie" resultMap="movieResultSet">
+		SELECT
+		      MOVIE_NO,
+		      MOVIE_TITLE,
+		      MOVIE_RT,
+		      MOVIE_RATED,
+		      MOVIE_RELEASE,
+		      MOVIE_STORY,
+		      STATUS,
+		      GENRE_NAME,
+		      DIRECTOR_NO,
+		      FILE_PATH,
+		      CHANGE_NAME
+		  FROM
+		      TB_MOVIE
+          JOIN
+              TB_ATTACHMENT USING (MOVIE_NO)
+		  JOIN
+		      TB_GENRE ON (GENRE_CODE = GENRE_NO)
+		 WHERE
+		      GENRE_NAME = #{genreName}
+           AND
+              FILE_LEVEL = 1	
+	</select>
+	
+	
+	<select id="detailMovie" resultMap="movieResultSet">
+		SELECT 
+		   MOVIE_NO,
+		   MOVIE_TITLE,
+		   MOVIE_RT,
+		   MOVIE_RATED,
+		   TO_CHAR(MOVIE_RELEASE, 'YY/MM/DD') MOVIE_RELEASE,
+		   MOVIE_STORY,
+		   STATUS,
+		   GENRE_NO,
+		   GENRE_NAME,
+		   DIRECTOR_NO,
+		   DIRECTOR_NAME,
+		   MOVIE_UPDATE,
+		   FILE_PATH,
+		   CHANGE_NAME,
+		   TRAILER_VIDEO
+		FROM
+		   TB_MOVIE
+		JOIN 
+		    TB_GENRE ON GENRE_NO = GENRE_CODE
+		JOIN 
+		    TB_DIRECTOR USING(DIRECTOR_NO)
+		  JOIN
+		      TB_ATTACHMENT USING (MOVIE_NO)
+		WHERE
+		   MOVIE_NO = #{movieNo}
+	</select>
+	
+	
+	<select id="stilCut" resultMap="attachResultSet">
+		SELECT
+			  MOVIE_NO,
+			  FILE_PATH,
+			  CHANGE_NAME
+		  FROM
+			  TB_ATTACHMENT
+		  JOIN
+			  TB_MOVIE USING(MOVIE_NO)
+		 WHERE
+			  MOVIE_NO = #{movieNo}
+		   AND
+			  FILE_LEVEL = 2
+	</select>
+	
+	
+	<select id="movieCast" resultType="string">
+		SELECT 
+		    LISTAGG(ACTOR_NAME, ',') 
+		    WITHIN GROUP 
+		           (ORDER BY ACTOR_NO) AS ACTOR_NAMES
+		FROM 
+		    TB_ACTOR
+		JOIN 
+		    TB_CAST USING(ACTOR_NO)
+		WHERE
+		    MOVIE_NO = #{movieNo}
+	</select>
+	
+	
 </mapper>

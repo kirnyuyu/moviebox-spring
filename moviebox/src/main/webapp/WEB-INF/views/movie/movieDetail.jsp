@@ -209,23 +209,25 @@
 	<div id="wrap">
 		<div id="movie-detail">
 	<c:choose>
-		<c:when test="${ movie.movieTitle eq null }">
-			<div id="noMovieList">
-				<a id="noMovie">조회 된 영화가 없습니다.</a>
-			</div>
-		</c:when>
+	    <c:when test="${empty movieList}">
+	        <div id="noMovieList">
+	            <a id="noMovie">조회된 영화가 없습니다.</a>
+	        </div>
+	    </c:when>
 		<c:otherwise>
             <div id="movie-detail-box">
-                <div id="movie-detail-poster">
-                    <img src="${ movie.filePath }/${ movie.changeName }" width="300" height="422">
+            
+            <!-- ${movieList }-->
+                <div id="movie-detail-poster"><!--  -->
+                    <img src="${ movieList[0].filePath }/${ movieList[0].changeName }" width="300" height="422">
                 </div>
 
                 <div id="movie-detail-content">
-                    <div id="movie-detail-title">${ movie.movieTitle }</div>
+                    <div id="movie-detail-title">${movieList[0].movieTitle}</div>
                     <div id="movie-detail-etc">
-                        <a>${ movie.genreName }</a> | <a>${ movie.movieRt }분</a> | <a>${ movie.movieRated }이상 관람가</a> | <a>${ movie.movieRelease } 개봉</a>
+                        <a>${ movieList[0].genreName }</a> | <a>${ movieList[0].movieRt }분</a> | <a>${ movieList[0].movieRated }이상 관람가</a> | <a>${ movieList[0].movieRelease } 개봉</a>
                     </div>
-                    <div id="movie-detail-director">감독 | ${ movie.directorName }</div>
+                    <div id="movie-detail-director">감독 | ${ movieList[0].directorName }</div>
                     
                     <c:choose>
                     	<c:when test="${ empty cast }">
@@ -236,7 +238,7 @@
                     	</c:otherwise>
                     </c:choose>
                     
-                    <div id="movie-detail-story"><textarea id="movie-story" readonly>${ movie.movieStory }</textarea>
+                    <div id="movie-detail-story"><textarea id="movie-story" readonly>${ movieList[0].movieStory }</textarea>
                     </div>
                     
                    <c:choose>
@@ -255,7 +257,7 @@
                 <a id="videoTitle">예고편</a>
                 
                 <div id="video-src">
-                    <iframe width="1200" height="600" src="${ movie.trailerVideo }"></iframe>
+                    <iframe width="1200" height="600" src="${ movieList[0].trailerVideo }"></iframe>
                 </div>
             </div>
             
@@ -303,7 +305,7 @@
 
 		function noMember(){
 			alert('로그인이 필요한 서비스 입니다.');
-			location.href = ('${ path }/loginForm.me');
+			location.href = ('${ path }/loginForm.member');
 		}
 	
     	// 예매하기 버튼 -> 예매 페이지

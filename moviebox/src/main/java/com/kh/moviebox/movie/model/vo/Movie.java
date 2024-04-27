@@ -19,12 +19,12 @@ public class Movie {
 	private String status;
 	private String genreNo;
 	private int directorNo;
-	private String filePath;
 	private String movieUpdate;
 	private String genreName;
 	private String directorName;
 	private String watchDate;
 	private int screenNo;
+	private String filePath;
 	private String changeName;
 	private String trailerVideo;
 }

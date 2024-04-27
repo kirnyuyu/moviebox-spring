@@ -272,7 +272,7 @@
     	// 비회원 상태에서 예매하기 버튼 클릭 시
 		function noMember(){
 			alert('로그인이 필요한 서비스 입니다.');
-			location.href = ('${ path }/loginForm.me');
+			location.href = ('${ path }/loginForm.member');
 		}
 		
     	// 예매하기 버튼 -> 예매 페이지

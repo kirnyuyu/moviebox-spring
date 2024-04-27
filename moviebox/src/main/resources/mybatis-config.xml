@@ -24,6 +24,7 @@
 		<typeAlias type="com.kh.moviebox.notice.model.vo.Notice" alias="notice"/>
 
 		<typeAlias type="com.kh.moviebox.movie.model.vo.Movie" alias="movie"/>
+		<typeAlias type="com.kh.moviebox.movie.model.vo.Cast" alias="cast"/>
 	</typeAliases>
 
 
