@@ -12,10 +12,16 @@
 		<result column="CREATE_DATE" 	property="createDate"/>
 		<result column="COUNT" 			property="count"/>
 		<result column="STATUS" 		property="status"/>
-		<result column="MEMBER_NAME" 		property="boardWriter"/>
+		<result column="MEMBER_NAME" 	property="boardWriter"/>
 		<result column="CATEGORY_NAME" 	property="boardCategory"/>
+		<result column="MEMBER_NO" 		property="userNo"/>
+		<result column="CATEGORY_NO" 	property="categoryNo"/>
 	</resultMap>
 
+	<resultMap type="category" id="categoryResultSet">
+		<result column="CATEGORY_NO"	property="categoryNo"/>
+		<result column="CATEGORY_NAME"	property="categoryName"/>
+	</resultMap>
 
 	<select id="selectListCount" resultType="_int">
 		SELECT
@@ -30,6 +36,7 @@
 	<select id="selectList" resultMap="boardResultSet">
 		SELECT
               BOARD_NO,
+              CATEGORY_NO,
               CATEGORY_NAME,
               BOARD_TITLE,
               MEMBER_NAME,
@@ -46,6 +53,135 @@
             BY
               BOARD_NO DESC
 	</select>
+
+
+	<update id="increaseCount" parameterType="_int">
+		UPDATE
+			  TB_BOARD
+		   SET
+		   	  COUNT = COUNT + 1
+		 WHERE
+		 	  BOARD_NO = #{boardNo}
+		   AND
+		   	  STATUS = 'Y'
+	</update>
+	
+	<insert id="insert" parameterType="board">
+		INSERT
+		  INTO
+	          TB_BOARD
+	          (
+	          BOARD_NO,
+	          BOARD_TITLE,
+	          BOARD_CONTENT,
+	          CREATE_DATE,
+	          CATEGORY_NO,
+	          MEMBER_NO
+	          )
+	    VALUES
+		      (
+		      SEQ_BOARDNO.NEXTVAL,
+		      #{boardTitle},
+		      #{boardContent},
+		      SYSDATE,
+	          #{boardCategory},
+	          #{userNo}
+		      )
+	</insert>
+	
+	<select id="selectCategoryList" resultMap="categoryResultSet">
+		SELECT
+			  CATEGORY_NO,
+			  CATEGORY_NAME
+		  FROM
+		  	  TB_CATEGORY
+	</select>
+	
+	
+	<select id="selectBoard" parameterType="_int" resultMap="boardResultSet">
+		SELECT
+	          BOARD_NO,
+	          CATEGORY_NAME,
+	          BOARD_TITLE,
+	          TO_CHAR(CREATE_DATE, 'YY/MM/DD') CREATE_DATE,
+	          MEMBER_NAME,
+	          MEMBER_NO,
+	          BOARD_CONTENT
+		  FROM
+	          TB_BOARD
+		  LEFT		
+		  JOIN
+	          TB_MEMBER USING (MEMBER_NO)
+		  JOIN
+	          TB_CATEGORY USING(CATEGORY_NO)
+		 WHERE
+	          BOARD_NO = #{boardNo}
+		   AND
+	          TB_BOARD.STATUS = 'Y'
+	</select>
+	
+	<!-- 수정 -->
+	<update id="updateBoard" parameterType="board">
+		UPDATE
+			  TB_BOARD
+		   SET
+		   	  CATEGORY_NO = #{categoryNo},
+		   	  BOARD_TITLE = #{boardTitle},
+		   	  BOARD_CONTENT = #{boardContent}
+		 WHERE
+		 	  BOARD_NO = #{boardNo}
+		   AND
+		   	  STATUS = 'Y'
+	</update>
+	
+	<!-- 삭제 -->
+	<update id="deleteBoard">
+		UPDATE
+			  TB_BOARD
+		   SET
+		   	  STATUS = 'N'
+		 WHERE
+			  BOARD_NO = #{boardNo}
+	</update>
+	
+	
+	<select id="selectAnswer" resultType="answer" parameterType="_int">
+		SELECT
+			  ANSWER_NO answerNo,
+			  ANSWER_CONTENT answerContent,
+			  TO_CHAR(CREATE_DATE, 'YY/MM/DD') CREATE_DATE createDate,
+			  MEMBER_NAME answerWriter
+		  FROM
+		  	  TB_ANSWER A
+		  JOIN
+		  	  TB_MEMBER ON (MEMBER_NO = ANSWER_WRITER)
+		 WHERE
+		 	  BOARD_NO = #{boardNo}
+		   AND
+		   	  A.STATUS = 'Y'
+		 ORDER
+		 	BY
+		 	  ANSWER_NO DESC
+	</select>
+	
+	<insert id="insertAnswer" parameterType="answer">
+		INSERT
+  	 	  INTO
+  	 	  	  TB_ANSWER
+  	 	  	  (
+  	 	  	  ANSWER_NO,
+  	 	  	  ANSWER_CONTENT,
+  	 	  	  BOARD_NO,
+  	 	  	  ANSWER_WRITER
+  	 	  	  )
+		VALUES
+			  (
+			  SEQ_ANSNO.NEXTVAL,
+			  #{answerContent},
+			  #{boardNo},
+			  #{answerWriter}
+			  )
+	</insert>
 
 
 </mapper>

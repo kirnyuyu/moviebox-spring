@@ -113,17 +113,18 @@
 
 
         .detail-category{
-            width: 170px;
+            width: 190px;
             height: 60px;
             line-height: 55px;
             font-size: 20px;
             font-weight: bold;
             padding-left: 10px;
+            padding-right: 10px;
             float: left;
         }
 
         .detail-title{
-            width: 1030px;
+            width: 1010px;
             height: 60px;
             line-height: 55px;
             font-size: 20px;
@@ -133,16 +134,18 @@
         }
 
         .detail-date{
-            width: 170px;
+            width: 190px;
             height: 30px;
             line-height: 25px;
             float: left;
             color: #8a8a8a;
             padding-left: 10px;
+            padding-right: 10px;
+            
         }
 
         .detail-count{
-            width: 1030px;
+            width: 1010px;
             height: 30px;
             line-height: 25px;
             color: #8a8a8a;
@@ -305,7 +308,7 @@
                 <div class="notice-content">
                     <div class="detail-box1">
                         <div class="detail-title-box1">
-                            <div class="detail-category"><span>No.${ board.boardNo } [${ board.boardCategory }]</span></div>
+                            <div class="detail-category"><span>No.${ board.boardNo } [${ board.boardCategory } 문의]</span></div>
                             <div class="detail-title"><span>${ board.boardTitle }</span></div>
                         </div>
                     </div>
@@ -329,7 +332,7 @@
 		                            <thead>
 		                                <tr>
 		                                    <c:choose>
-		                                    	<c:when test="${!empty sessionScope.loginUser and sessionScope.loginUser.memberNo eq 1}">
+		                                    	<c:when test="${ loginUser.privilege eq 'Y' }">
 		                                	<th style="text-align:center;">답변</th>
 				                                        <td>
 				                                            <textarea id="answerContent"></textarea>
@@ -345,41 +348,96 @@
 		                                </tr>
 		                            </thead>
 		                            <tbody id="answer">
+
 		                            </tbody>
 		                        </table>
                     </div>
+            
+            <!--         
+            <script>
+        
+        	function insertAnswer(){
+        		if($('#answerContent').val().trim() != ''){
+        			$.ajax({
+        				url : 'answer',
+        				data : {
+        					refBoardNo : ${board.boardNo},
+        					replyContent : $('#answerContent').val(),
+        					replyWriter : '${sessionScope.loginUser.memberName}'
+        				},
+        				type : 'post',
+        				success : function(result){
+        					
+        					console.log(result);
+        					
+        					if(result == 'success'){
+        						$('#answerContent').val('');
+        						selectAnswer();
+        					};
+        				}
+        			});
+        		}
+        		else{
+        			alertify.alert('장난치지마라');
+        		}
+        	}
+        
+        	function selectAnswer(){
+        		$.ajax({
+        			url : 'answer',
+        			type : 'get',
+        			data : {boardNo : ${board.boardNo}},
+        			success : function(result){
+        				// console.log(result);
+        				
+        				let resultStr = '';
+        				for(let i in result){
+        					resultStr += '<tr>'
+        							   + '<td>' + result[i].answerWriter + '</td>'
+        							   + '<td>' + result[i].answerContent + '</td>'
+        							   + '<td>' + result[i].createDate + '</td>'
+        							   + '</tr>';
+        				}
+        				$('#answer').html(resultStr);
+        			}
+        		});
+        	};
+        	
+        	$(function(){
+        		selectAnswer();
+        	})
+        	
+        </script>
+        -->
+                    
                     
                     <script>
                     
                     function selectAnswerList(){
                     	$.ajax({
-                    		url : 'answerList.board',
+                    		url : 'answer',
+                    		type : 'get',
                     		data : {boardNo : ${ board.boardNo }},
                     		success : function(result){
                     			let resultStr = '';
+     						   console.log(answerWriter);
+
                     			for(let i in result){
                     				resultStr += '<tr>'
                     						   + '<td id="answerWriter">' + result[i].answerWriter + '</td>'
                     						   + '<td id="answerContent2"><pre id="preA">' + result[i].answerContent + '</pre></td>'
                     						   + '<td id="answercreateDate">' + result[i].createDate + '</td>'
                     						   + '</tr>'
+                    						   
                     			};
                     			$('#answer').html(resultStr);
-                    		},
-        					error : function(e){
-        						console.log(e);
-        					}
+                    		}
                     	});
                     }
-                    
-            		$(function(){
-            			selectAnswerList();
-            			setInterval(selectAnswerList, 1000);
-            		});
-            	
+
                     function insertAnswer(){
         				$.ajax({
-        					url : 'answerInsert.board',
+        					url : 'answer',
         					type : 'post',
         					data : {
         						answerContent : $('#answerContent').val(),
@@ -394,13 +452,14 @@
         				});
         			}
                     </script>
+                   
                 </div>
             </div> <!-- notice-content -->
                 <div class="notice-btn" align="center">
                     <button class="board-detail-btn" onclick="backPage();">목록</button>
                     
                     
-                    <c:if test="${ loginUser ne null and loginUser.memberNo eq board.userNo}">
+                    <c:if test="${ sessionScope.loginUser.memberNo eq board.userNo}">
                     <!-- < % if(loginUser != null && loginUser.getMemberNo() == board.getUserNo()) { %> -->
 	                    <button class="board-detail-btn" onclick="boardUpdatePage();">수정</button> 
 	                    <button class="board-detail-btn" onclick="boardDelete();">삭제</button>

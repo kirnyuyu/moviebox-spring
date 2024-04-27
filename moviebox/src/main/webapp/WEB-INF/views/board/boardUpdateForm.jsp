@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-<%@ page import="com.kh.moviebox.board.model.vo.*, java.util.ArrayList" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
@@ -255,7 +254,7 @@
 		                <div class="notice-content">
 		                    <div class="detail-box1">
 		                        <div class="detail-title-box1">
-		                            <div class="detail-category"><span>문의사항 작성</span></div>
+		                            <div class="detail-category"><span>문의사항 수정</span></div>
 		                        </div>
 		                    </div>
 		
@@ -268,9 +267,9 @@
 		                            <div id="category-box">
 		                                <div id="box-name">분류</div>
 		                                
-		                                <select name="category" id="select-category">
+		                                <select name="categoryNo" id="select-category">
 		                                <c:forEach var="c" items="${ requestScope.category }">
-											<option value="${ c.categoryNo }" class="${ c.categoryName }">
+											<option value="${ c.categoryNo }">
 												${ c.categoryName } 문의
 											</option>
 										</c:forEach>
@@ -286,12 +285,12 @@
 		
 		                            <div id="title-box">
 		                                <div id="box-name">제목</div>
-		                                <input type="text" id="select-title" name="title" value="${ board.boardTitle }">
+		                                <input type="text" id="select-title" name="boardTitle" value="${ board.boardTitle }">
 		                            </div>
 		
 		                            <div id="content-box">
 		                                <div id="box-name">내용</div>
-		                                <textarea id="select-content" cols="30" rows="10" name="content">${ board.boardContent }</textarea>
+		                                <textarea id="select-content" cols="30" rows="10" name="boardContent">${ board.boardContent }</textarea>
 		                            </div>
 			
 			
@@ -316,7 +315,7 @@
     	
 	</c:choose>
 	
-	<jsp:include page="/views/common/footer.jsp"></jsp:include>
+	<jsp:include page="../common/footer.jsp"></jsp:include>
 	
 	    <script>
 			function openNoticePage(){

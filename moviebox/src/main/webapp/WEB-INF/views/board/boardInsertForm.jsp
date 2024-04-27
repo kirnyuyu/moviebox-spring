@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-<%@ page import="com.kh.moviebox.board.model.vo.Category, java.util.ArrayList" %>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
@@ -233,7 +231,7 @@
 
 </head>
 <body>
-	<jsp:include page="/views/common/header.jsp"></jsp:include>
+	<jsp:include page="../common/header.jsp"></jsp:include>
 	
     <div id="wrap">
         <div id="notice-detail">
@@ -266,11 +264,11 @@
                             <div id="category-box">
                                 <div id="box-name">분류</div>
                                 
-                                <select name="category" id="select-category">
+                                <select name="boardCategory" id="select-category">
                                 
-                                <c:forEach var="c" items="${ requestScope.category}">
+                                <c:forEach var="c" items="${ category }">
 									<option value="${ c.categoryNo }">
-										${ c.categoryName } 문의
+										${ c.categoryName } 문의 
 									</option>
 								</c:forEach>
 								
@@ -279,12 +277,12 @@
 
                             <div id="title-box">
                                 <div id="box-name">제목</div>
-                                <input type="text" id="select-title" name="title">
+                                <input type="text" id="select-title" name="boardTitle">
                             </div>
 
                             <div id="content-box">
                                 <div id="box-name">내용</div>
-                                <textarea id="select-content" cols="30" rows="10" name="content"></textarea>
+                                <textarea id="select-content" cols="30" rows="10" name="boardContent"></textarea>
                             </div>
 	
 	
@@ -302,15 +300,15 @@
         </div> <!-- notice-detail -->
     </div> <!-- wrap -->
 
-	<jsp:include page="/views/common/footer.jsp"></jsp:include>
+	<jsp:include page="../common/footer.jsp"></jsp:include>
 	
 	    	<script>
 			function openNoticePage(){
-				location.href = '${ path }/list.notice?currentPage=1';
+				location.href = '${ path }/list.notice?page=1';
 			}
 			
 			function openQnaPage(){
-				location.href = '${ path }/list.board?currentPage=1';
+				location.href = '${ path }/list.board?page=1';
 			}
 			
     		function backPage(){

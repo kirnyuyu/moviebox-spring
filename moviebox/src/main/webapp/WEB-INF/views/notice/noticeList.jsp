@@ -326,13 +326,13 @@
 		          		</c:otherwise>
 		          	</c:choose>
 	                    
-	                <c:forEach begin="${ pageInfo.startPage }" end="${ pageInfo.endPage }" var="i" >
+	                <c:forEach begin="${ pageInfo.startPage }" end="${ pageInfo.endPage -1 }" var="i" >
 						<button class="btn btn-outline-secondary" style="color:white; border: 1px solid white;"
 						onclick="location.href='${ path }/list.notice?page=${ i }'">${ i }</button>
 	                </c:forEach>
 	                	
 	                	<c:choose>
-	                		<c:when test="${ pageInfo.currentPage ne pageInfo.maxPage }">
+	                		<c:when test="${ pageInfo.currentPage ne pageInfo.maxPage -1 }">
 				                <button class="btn btn-outline-secondary" style="color:white; background: none; border: 1px solid white;"
 				                onclick="location.href='${ path }/list.notice?page=${ pageInfo.currentPage + 1 }'"> > </button>
 		            		</c:when>
