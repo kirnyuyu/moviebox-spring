@@ -8,7 +8,7 @@
 	<resultMap type="notice" id="noticeResultSet">
 		<result column="NOTICE_NO" 	   		property="noticeNo"/>
 		<result column="NOTICE_TITLE"   	property="noticeTitle"/>
-		<result column="NOTICE_WRITER"  	property="noticeWriter"/>
+		<result column="NOTICE_WRITER"  	property="userNo"/>
 		<result column="NOTICE_CONTENT" 	property="noticeContent"/>
 		<result column="CREATE_DATE" 		property="createDate"/>
 		<result column="COUNT"   			property="count"/>
@@ -99,7 +99,7 @@
 			  (
 			  SEQ_NOTICENO.NEXTVAL,
 			  #{noticeTitle},
-			  #{noticeWriter},
+			  #{userNo},
 			  #{noticeContent},
 			  SYSDATE,
 			  #{noticeCategory}
@@ -114,7 +114,15 @@
 		  	  TB_CATEGORY
 	</select>
 	
-	
+	<!-- 삭제 -->
+	<update id="deleteNotice">
+		UPDATE
+			  TB_NOTICE
+		   SET
+		   	  STATUS = 'N'
+		 WHERE
+		 	  NOTICE_NO = #{noticeNo}
+	</update>
 	
 	
 	

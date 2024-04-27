@@ -236,7 +236,7 @@
                         <a class="nav-link" href="${ path }/search.theater"><span>영화관</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${ path }/list.notice?currentPage=1"><span>고객센터</span></a>
+                        <a class="nav-link" href="${ path }/list.notice"><span>고객센터</span></a>
                     </li>
                     <li class="nav-item">
        					

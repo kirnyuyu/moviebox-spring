@@ -260,7 +260,7 @@
 		                    <div class="detail-content-box">
 		                        <form action="${ path }/insert.notice" method="post" id="insert-box">
 		                        
-		                        <input type="hidden" name="memberNo" value="${ loginUser.memberNo }" />
+		                        <input type="hidden" name="userNo" value="${ loginUser.memberNo }" />
 		                            
 		                            <div id="category-box">
 		                                <div id="box-name">분류</div>

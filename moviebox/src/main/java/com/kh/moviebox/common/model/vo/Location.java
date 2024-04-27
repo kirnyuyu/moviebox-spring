@@ -9,10 +9,9 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString
-public class Price {
-	private int studentCount;
-	private int commonCount;
-	private int studentPrice;
-	private int commonPrice;
-	private int totalPrice;
+public class Location {
+
+	private String locationCode;
+	private String locationName;
+
 }
