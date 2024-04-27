@@ -42,4 +42,8 @@ public class NoticeRepository {
 		return sqlSession.update("noticeMapper.deleteNotice", noticeNo);
 	}
 
+	public int updateNotice(SqlSessionTemplate sqlSession, Notice notice) {
+		return sqlSession.update("noticeMapper.updateNotice", notice);
+	}
+
 }

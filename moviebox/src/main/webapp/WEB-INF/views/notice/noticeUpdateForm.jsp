@@ -1,8 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
-<%@ page import="com.kh.board.model.vo.Category, java.util.ArrayList,
-				 com.kh.notice.model.vo.Notice"%>
 				 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     
@@ -230,10 +227,10 @@
     
 </head>
 <body>
-<jsp:include page="/views/common/header.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
     
    	<c:choose>
-	<c:when test="${ loginUser.memberNo eq 1 }">
+	<c:when test="${ loginUser.privilege eq 'Y' }">
 	    <div id="wrap">
 	        <div id="notice-detail">
 	            <!-- 전체 감싸는 부분 -->
@@ -241,15 +238,11 @@
 	
 	                <div id="title">고객센터</div>
 	        
-	                <!-- 고객센터 큰 분류 카테고리 
-	                <div id="board-category">
-	                    <div class="notice-tap">공지사항</div>
-	                    <div class="qna-tap">QnA</div>
-	                </div>-->
 	                <div class="notice-content">
 	                    <div class="detail-box1">
 	                        <div class="detail-title-box1">
 	                            <div class="detail-category"><span>공지사항 작성</span></div>
+
 	                        </div>
 	                    </div>
 	                    
@@ -262,7 +255,8 @@
 	                                <div id="box-name">분류</div>
 	                                
 	                                
-	                                <select name="category" id="select-category">
+	                                <select name="categoryNo" id="select-category">
+
 	                               
 	                               <c:forEach var="c" items="${ requestScope.category }">
 										<option class="${ c.categoryName }" value="${ c.categoryNo }">
@@ -283,12 +277,12 @@
 	
 	                            <div id="title-box">
 	                                <div id="box-name">제목</div>
-	                                <input type="text" id="select-title" name="title" value="${ notice.noticeTitle }">
+	                                <input type="text" id="select-title" name="noticeTitle" value="${ notice.noticeTitle }">
 	                            </div>
 	
 	                            <div id="content-box">
 	                                <div id="box-name">내용</div>
-	                                <textarea id="select-content" cols="30" rows="10" name="content">${ notice.noticeContent }</textarea>
+	                                <textarea id="select-content" cols="30" rows="10" name="noticeContent">${ notice.noticeContent }</textarea>
 	                            </div>
 		
 		                        <div id="insert-btn" align="center">
@@ -310,14 +304,14 @@
 		<c:otherwise>
 			<script>
 				alert('관리자만 수정 가능합니다.');
-				location.href = '${ path }/list.notice?currentPage=1';
+				location.href = '${ path }/list.notice?page=1';
 			</script>
     	</c:otherwise>
     	
 	</c:choose>
     
 
-<jsp:include page="/views/common/footer.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
 
 
     

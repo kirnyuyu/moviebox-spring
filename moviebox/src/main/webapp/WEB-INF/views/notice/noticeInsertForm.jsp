@@ -230,7 +230,7 @@
 	<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 
 	<c:choose>
-		<c:when test="${ loginUser.privilege == 'N' }">
+		<c:when test="${ loginUser.privilege eq 'N' }">
 	    	<script>
 	    		alert('관리자만 작성 가능합니다.');
 	    	</script>

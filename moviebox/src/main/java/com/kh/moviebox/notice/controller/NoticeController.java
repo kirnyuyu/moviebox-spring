@@ -7,6 +7,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -60,12 +62,33 @@ public class NoticeController {
 			session.setAttribute("alertMsg", "공지사항 작성 완료");
 			return "redirect:list.notice";
 		} else {
-			model.addAttribute("errorMsg", "공지사항 작성 실패");
+			model.addAttribute("alertMsg", "공지사항 작성 실패");
 			return "notice/noticeInsertForm";
 		}
 	}
 	
 	// 글 수정
+	@RequestMapping("updateForm.notice")
+	public String updateForm(int noticeNo, Model model, Category category, Notice notice) {
+		List<Category> list = noticeService.selectCategoryList(category);
+		Notice noticeList = noticeService.selectNotice(noticeNo);		
+		
+		model.addAttribute("category", list);
+		model.addAttribute("notice", noticeList);
+		
+		return "notice/noticeUpdateForm";
+	}
+	
+	@RequestMapping("update.notice")
+	public String update(@ModelAttribute Notice notice, HttpSession session) {
+		if(noticeService.updateNotice(notice) > 0) {
+			session.setAttribute("alertMsg", "공지사항 수정 완료");
+			return "redirect:detail.notice?noticeNo=" + notice.getNoticeNo();
+		} else {
+			session.setAttribute("errorMsg", "공지사항 수정 실패");
+			return "common/errorPage";
+		}
+	}
 	
 	
 	// 글 삭제
@@ -78,7 +101,7 @@ public class NoticeController {
 			session.setAttribute("alertMsg", "공지사항 삭제 실패");
 			return "redirect:list.notice";
 		}
-		
 	}
+	
 
 }

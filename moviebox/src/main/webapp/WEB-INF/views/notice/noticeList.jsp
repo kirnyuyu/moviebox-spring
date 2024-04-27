@@ -272,7 +272,7 @@
 	            <!-- 관리자로 로그인 시 -->
 	        <div id="qna-insert">
 	        
-	        <c:if test="${ loginUser.privilege == 'Y' }">
+	        <c:if test="${ loginUser.privilege eq 'Y' }">
 		    	<button id="qna-insert-btn" onclick="noticeInsert();">글쓰기</button>
 	        </c:if>
 	        </div>

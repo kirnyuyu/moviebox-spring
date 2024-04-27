@@ -58,6 +58,11 @@ public class NoticeServiceImpl implements NoticeService {
 	public int deleteNotice(int noticeNo) {
 		return noticeRepository.deleteNotice(sqlSession, noticeNo);
 	}
+
+	@Override
+	public int updateNotice(Notice notice) {
+		return noticeRepository.updateNotice(sqlSession, notice);
+	}
 	
 
 }
