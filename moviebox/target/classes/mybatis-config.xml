@@ -32,6 +32,7 @@
 		<mapper resource="/mapper/member-mapper.xml"/>
 		<mapper resource="/mapper/notice-mapper.xml"/>
 		<mapper resource="/mapper/movie-mapper.xml"/>
+		<mapper resource="/mapper/board-mapper.xml"/>
 
 	</mappers>
 	

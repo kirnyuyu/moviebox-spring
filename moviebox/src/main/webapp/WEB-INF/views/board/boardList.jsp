@@ -1,9 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
-<%@ page import="com.kh.moviebox.board.model.vo.Board,
-				 com.kh.moviebox.common.model.vo.PageInfo,
- 				 java.util.ArrayList"%>
  				 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     
@@ -233,7 +229,7 @@
 </head>
 <body>
     
-    <jsp:include page="/views/common/header.jsp"></jsp:include>
+    <jsp:include page="../common/header.jsp"></jsp:include>
        	
     <div id="wrap">
 
@@ -289,14 +285,14 @@
                     <tbody>
                     
 						<c:choose>
-							<c:when test="${ empty boardList }">
+							<c:when test="${ empty list }">
 							
 		                        <tr>
 		                            <td colspan="5" style="color: white;">조회 된 문의사항이 없습니다. </td>
 		                        </tr>
 	                        </c:when>
 	                        <c:otherwise>
-	                        	<c:forEach var="b" items="${ requestScope.boardList }">
+	                        	<c:forEach var="b" items="${ requestScope.list }">
 	                        <tr class="board">
 	                            <td id="list-no">${ b.boardNo }</td>
 	                            <td id="list-ca">${ b.boardCategory }</td>
@@ -313,42 +309,45 @@
 
             <div id="page">
                 <div class="paging-area" align="center" style="margin-top:12px;">
-          			<c:if test="${ pageInfo.currentPage > 1}">
+                	<c:choose>
+                		<c:when test="${ pageInfo.currentPage eq 1}">
+		          			<button class="btn btn-outline-secondary" style="color:white; background: none; border: 1px solid white;" disabled> < </button>
+		          		</c:when>
+		          		<c:otherwise>
 		          			<button class="btn btn-outline-secondary" style="color:white; background: none; border: 1px solid white;"
-		          			onclick="location.href='${ path }/list.notice?currentPage=${ pageInfo.currentPage - 1 }'"> < </button>
-		          	</c:if>
+		          			onclick="location.href='${ path }/list.board?page=${ pageInfo.currentPage - 1 }'"> < </button>
+		          		</c:otherwise>
+		          	</c:choose>
 	                    
 	                <c:forEach begin="${ pageInfo.startPage }" end="${ pageInfo.endPage }" var="i" >
-	                	<c:choose>
-		                	<c:when test="${ pageInfo.currentPage ne i }">
-						        <button class="btn btn-outline-secondary" style="color:white; border: 1px solid white;"
-						        onclick="location.href='${ path }/list.notice?currentPage=${ i }'">${ i }</button>
-						    </c:when>
-						    <c:otherwise>
-						    	<button disabled class="btn btn-outline-secondary" style="color:white; background-color:#6c757d; border: 1px solid white;">${ i }</button>
-						    </c:otherwise>
-					    </c:choose>
+						<button class="btn btn-outline-secondary" style="color:white; border: 1px solid white;"
+						onclick="location.href='${ path }/list.board?page=${ i }'">${ i }</button>
 	                </c:forEach>
-	                
-	                	<c:if test="${ pageInfo.currentPage ne pageInfo.maxPage }">
-			                <button class="btn btn-outline-secondary" style="color:white; background: none; border: 1px solid white;"
-			                onclick="location.href='${ path }/list.notice?currentPage=${ pageInfo.currentPage + 1 }'"> > </button>
-		            	</c:if>
+	                	
+	                	<c:choose>
+	                		<c:when test="${ pageInfo.currentPage ne pageInfo.maxPage }">
+				                <button class="btn btn-outline-secondary" style="color:white; background: none; border: 1px solid white;"
+				                onclick="location.href='${ path }/list.board?page=${ pageInfo.currentPage + 1 }'"> > </button>
+		            		</c:when>
+		            		<c:otherwise>
+				                <button class="btn btn-outline-secondary" style="color:white; background: none; border: 1px solid white;" disabled> > </button>
+		            		</c:otherwise>
+		            	</c:choose>
                 </div>
             </div>
 
         </div>
     </div>
 
-	<jsp:include page="/views/common/footer.jsp"></jsp:include>
+	<jsp:include page="../common/footer.jsp"></jsp:include>
    	
  	    <script>
     		function openNoticePage(){
-    			location.href = '${ path }/list.notice?currentPage=1';
+    			location.href = '${ path }/list.notice?page=1';
     		}
     		
     		function openQnaPage(){
-    			location.href = '${ path }/list.board?currentPage=1';
+    			location.href = '${ path }/list.board?page=1';
     		}
     		
     		function boardInsert(){
@@ -362,7 +361,7 @@
     		
     		function noMember(){
     			alert('로그인이 필요한 서비스 입니다.');
-    			location.href = ('${ path }/loginForm.me');
+    			location.href = ('${ path }/loginForm.member');
     		}
     	
     	</script>

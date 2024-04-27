@@ -350,11 +350,11 @@
 
     	<script>
     		function openNoticePage(){
-    			location.href = '${ path }/list.notice?currentPage=1';
+    			location.href = '${ path }/list.notice?page=1';
     		}
     		
     		function openQnaPage(){
-    			location.href = '${ path }/list.board?currentPage=1';
+    			location.href = '${ path }/list.board?page=1';
     		}
     		
     		function noticeInsert(){
