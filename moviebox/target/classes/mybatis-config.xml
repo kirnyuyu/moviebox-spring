@@ -2,28 +2,40 @@
 <!DOCTYPE configuration
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-config.dtd">
-  
-  
 <configuration>
-
 	<settings>
 		<setting name="jdbcTypeForNull" value="NULL"/>
 	</settings>
 
 	<typeAliases>
 		<typeAlias type="com.kh.moviebox.member.model.vo.Member" alias="member"/>
-		
-		<typeAlias type="com.kh.moviebox.board.model.vo.Answer" alias="answer"/>
-		<typeAlias type="com.kh.moviebox.board.model.vo.Board" alias="board"/>
-		<typeAlias type="com.kh.moviebox.board.model.vo.Category" alias="category"/>
-		
-		<typeAlias type="com.kh.moviebox.notice.model.vo.Notice" alias="notice"/>
+		<typeAlias type="com.kh.moviebox.common.model.vo.Genre" alias="genre"/>
+		<typeAlias type="com.kh.moviebox.common.model.vo.Attachment" alias="attachment"/>
+		<typeAlias type="com.kh.moviebox.common.model.vo.Price" alias="price"/>
+		<typeAlias type="com.kh.moviebox.reservation.model.vo.Seat" alias="seat"/>
+		<typeAlias type="com.kh.moviebox.reservation.model.vo.Reservation" alias="reservation"/>
+		<typeAlias type="com.kh.moviebox.movie.model.vo.Movie" alias="movie"/>
 	</typeAliases>
-	
-	
+
+
 	<mappers>
 		<mapper resource="/mapper/member-mapper.xml"/>
-		<mapper resource="/mapper/notice-mapper.xml"/>
 	</mappers>
-
+	
+	<!-- 주의할 점 : 매퍼파일을 등록하기 위해서는 반드시 해당 결로에 파일이 존재해야하며 namespace속성값도 있어야함 -->
+	
+	<!-- 
+		environments, dataSource에 기술했던 DB연결정보
+		
+		=> DB등록정보는 서버가 실행됨과 동시에 이루어져야 하는 작업 
+		서버켜짐과 동시에 읽혀지는 파일인 root-context.xml에 기술할 예정
+		
+		Spring Bean등록...
+		
+	-->
+	
+	
+	
+	
+	
 </configuration>

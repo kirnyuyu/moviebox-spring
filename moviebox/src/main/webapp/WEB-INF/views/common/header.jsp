@@ -174,14 +174,12 @@
 
 	<c:set var="path" value="${ pageContext.request.contextPath }" scope="session"/>
 	
-	<script>
-		const msg = '${ alertMsg }';
-		
-		if(msg != 'null' && msg != ''){
-			alert(msg);
-            <c:remove var="alertMsg"/>
-		}
-	</script>
+	<c:if test="${ not empty alertMsg }">
+        <script>
+            alert('${ alertMsg }');
+        </script>
+            <c:remove var="alertMsg" scope="session" />
+    </c:if>
 
 	<div class="header">
 		<div class="header-line">
@@ -238,7 +236,7 @@
                         <a class="nav-link" href="${ path }/search.theater"><span>영화관</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${ path }/list.notice"><span>고객센터</span></a>
+                        <a class="nav-link" href="${ path }/list.notice?currentPage=1"><span>고객센터</span></a>
                     </li>
                     <li class="nav-item">
        					

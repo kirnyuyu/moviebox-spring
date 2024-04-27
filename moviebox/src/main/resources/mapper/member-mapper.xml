@@ -2,16 +2,15 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
 <mapper namespace="memberMapper">
-<!-- 
+	
 	<resultMap type="genre" id="genreListMap">
 		<result column="GENRE_CODE" property="genreCode" />
 		<result column="GENRE_NAME" property="genreName" />
 	</resultMap>
- -->
 	
-	<resultMap type="member" id="memberResultSet">
+	
+	<resultMap type="member" id="meberResultSet">
 		<result column="MEMBER_NO" property="memberNo" />
 		<result column="MEMBER_ID" property="memberId" />
 		<result column="MEMBER_PWD" property="memberPwd" />
@@ -30,7 +29,7 @@
 	</resultMap>
 		
 	
-	<select id="login" parameterType="member" resultType="member">
+	<select id="login" parameterType="member" resultMap="meberResultSet">
 		SELECT
 	            MEMBER_NO,
 	            MEMBER_ID,	
@@ -64,4 +63,136 @@
 	
 	</select>
 
+	
+	<insert id="memberInsert" parameterType="member" >
+		INSERT ALL
+  	      INTO
+       		   TB_MEMBER(MEMBER_NO,MEMBER_ID,MEMBER_PWD,MEMBER_NAME,BIRTHDAY,GENDER,EMAIL,PHONE,ADDRESS,LOCAL_CODE)
+		VALUES 
+			   (SEQ_MEMNO.NEXTVAL,#{memberId},#{memberPwd},#{memberName},#{birthday},#{gender},#{email},#{phone},#{address},#{localCode})
+			   <foreach collection="genreList" item="genre">
+		  INTO
+			   TB_MEMBERGENRE
+	    VALUES(
+	    		SEQ_MEMNO.CURRVAL,
+	    		(SELECT
+       				    GENRE_CODE
+ 				   FROM
+       				    TB_GENRE
+ 				   WHERE
+       					 GENRE_NAME = #{genre.genreName}))
+			   </foreach>
+		SELECT
+			   *
+		  FROM
+		  	   DUAL
+	</insert>
+	<resultMap type="seat" id="seatResultSet">
+		<result column="SEAT_NO" property="seatNo" />
+	</resultMap>
+	
+	<resultMap type="attachment" id="attachmentResultSet">
+		<result column="CHANGE_NAME" property="changeName" />
+		<result column="FILE_PATH" property="filePath" />
+	</resultMap>
+	
+	<resultMap type="price" id="priceResultSet">
+		<result column="GRADE_1_COUNT" property="studentCount" />
+		<result column="GRADE_2_COUNT" property="commonCount" />
+		<result column="STUDENT_PRICE" property="studentPrice" />
+		<result column="COMMON_PRICE" property="commonPrice" />
+		<result column="TOTAL_PRICE" property="totalPrice" />
+	</resultMap>
+	<resultMap type="reservation" id="reservationResultSet">
+		<result column="TICKET_NO" property="ticketNo" />
+		<result column="MEMBER_NO" property="memberNo" />
+		<result column="SCREEN_NO" property="screenNo" />
+		<result column="SCREEN_NAME" property="screenName" />
+		<result column="MOVIE_TITLE" property="movieTitle" />
+		<result column="RUNNING_TIME" property="runningTime" />
+		<result column="THEATER_NAME" property="theaterName" />
+		<result column="WATCH_DATE" property="watchDate" />
+		<result column="STATUS" property="status" />
+		<result column="RESERVATION_DATE" property="reservationDate" />
+		<collection resultMap="priceResultSet" property="price" />
+		<collection resultMap="attachmentResultSet" property="attachment" />
+		<collection resultMap="seatResultSet" property="seatList" />
+		
+	</resultMap>
+	
+	<select id="myPagePrint" parameterType="member" resultMap="reservationResultSet">
+		SELECT
+       			    TICKET_NO,
+       				MEMBER_NO,
+                    TB_SEAT.SCREEN_NO,
+                    SCREEN_NAME,
+       				MOVIE_TITLE,
+                    TO_CHAR(WATCH_DATE,'HH24:MI') || '~' || TO_CHAR(WATCH_DATE + NUMTODSINTERVAL(TO_NUMBER(MOVIE_RT), 'MINUTE'), 'HH24:MI') AS RT,
+       				THEATER_NAME,
+       				TO_CHAR(WATCH_DATE,'YY/MM/DD, HH24:MI') AS WATCH_DATE,
+       				RESERVATION_DATE,
+       				TB_RESERVATION.STATUS AS STATUS,
+      				GRADE_1_COUNT,
+       				GRADE_2_COUNT,
+       				STUDENT_PRICE,
+       				COMMON_PRICE,
+       				TOTAL_PRICE,
+                    FILE_PATH,
+                    CHANGE_NAME,
+                    SEAT_NO
+  			 FROM
+       				TB_RESERVATION
+  			 JOIN
+       				TB_SCREEN USING(SCREEN_NO)
+             JOIN
+                    TB_SEAT USING(TICKET_NO)
+  			 JOIN
+      			 	TB_MOVIE USING(MOVIE_NO)
+  			 JOIN
+       				TB_THEATER USING(THEATER_NO)
+  			 JOIN
+       				TB_ATTACHMENT USING(MOVIE_NO)
+  			 JOIN
+       				(SELECT
+      				 			A.TICKET_NO,
+       							A.GRADE_1_COUNT,
+       							A.GRADE_2_COUNT,
+       							A.GRADE_1_COUNT * P1.PRICE AS STUDENT_PRICE,
+       							A.GRADE_2_COUNT * P2.PRICE AS COMMON_PRICE,
+       							(A.GRADE_1_COUNT * P1.PRICE) + (A.GRADE_2_COUNT * P2.PRICE) AS TOTAL_PRICE
+  						FROM
+        						(SELECT
+                							TICKET_NO,
+                						    COUNT(CASE 
+                  											   	WHEN GRADE = 1 THEN 1 
+                												ELSE NULL 
+                												END) AS GRADE_1_COUNT,
+       										COUNT(CASE 
+                												WHEN GRADE = 2 THEN 1 
+                												ELSE NULL 
+                												END) AS GRADE_2_COUNT
+           							FROM
+                							TB_RESERVATION
+           							 JOIN
+                							TB_PRICESHEET USING(TICKET_NO)
+           							 JOIN
+                							TB_PRICE USING(GRADE)
+          						  WHERE
+                							MEMBER_NO = #{memberNo}
+          						  GROUP 
+             						   BY 
+                							TICKET_NO) A
+  									JOIN 
+  											TB_PRICE P1 ON P1.GRADE = 1
+  									JOIN 
+  											TB_PRICE P2 ON P2.GRADE = 2
+  											) USING(TICKET_NO)  											 											
+ 				WHERE
+       						MEMBER_NO = #{memberNo}
+       				AND
+                      		FILE_LEVEL = 1 
+ 				ORDER
+ 	  			     BY
+ 	  	    				TICKET_NO DESC
+	</select>
 </mapper>

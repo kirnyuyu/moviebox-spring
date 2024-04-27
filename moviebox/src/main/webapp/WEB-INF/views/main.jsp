@@ -5,10 +5,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>MOVIE BOX</title>
+<title>Insert title here</title>
 </head>
 <body>
- 
 	<jsp:include page="common/header.jsp" />
 	<div style="height:500px;">
 	
