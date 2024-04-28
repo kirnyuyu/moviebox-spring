@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
     
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <!DOCTYPE html>
 <html>
@@ -289,6 +290,7 @@
     </style>
 
 </head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <body>
 	<jsp:include page="../common/header.jsp"/>
 	
@@ -324,136 +326,88 @@
                         </div>
                     </div>
                 </div> <!-- notice-content -->
-
+                
                 <div id="a-title">답변</div>
                 <div class="detail-content-a-box">
                     <div class="detail-a">
-		                        <table>
-		                            <thead>
-		                                <tr>
-		                                    <c:choose>
-		                                    	<c:when test="${ loginUser.privilege eq 'Y' }">
-		                                	<th style="text-align:center;">답변</th>
-				                                        <td>
-				                                            <textarea id="answerContent"></textarea>
-				                                        </td>
-				                                        <td><button onclick="insertAnswer();" id="answerSubmit">등록</button></td>
-		                                    	</c:when>
-		                                    	<c:otherwise>
-			                                        <td>
-			                                        </td>
-			                                        <td></td>
-		                                    	</c:otherwise>
-											</c:choose>
-		                                </tr>
-		                            </thead>
-		                            <tbody id="answer">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <c:choose>
+                                    	<c:when test="${ loginUser.privilege eq 'Y' }">
+                                	<th style="text-align:center;">답변</th>
+		                                        <td>
+		                                        	<input type="hidden" name="answerWriter" value="${ loginUser.memberNo }" />
+													<textarea id="answerContent" name="answerContent"></textarea>
+		                                        </td>
+		                                        <td><button onclick="insertAnswer();" id="answerSubmit">등록</button></td>
+                                    	</c:when>
+                                    	<c:otherwise>
+	                                        <td>
+	                                        </td>
+	                                        <td></td>
+                                    	</c:otherwise>
+									</c:choose>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-		                            </tbody>
-		                        </table>
+                            </tbody>
+                        </table>
                     </div>
-            
-            <!--         
-            <script>
-        
-        	function insertAnswer(){
-        		if($('#answerContent').val().trim() != ''){
-        			$.ajax({
-        				url : 'answer',
-        				data : {
-        					refBoardNo : ${board.boardNo},
-        					replyContent : $('#answerContent').val(),
-        					replyWriter : '${sessionScope.loginUser.memberName}'
-        				},
-        				type : 'post',
-        				success : function(result){
-        					
-        					console.log(result);
-        					
-        					if(result == 'success'){
-        						$('#answerContent').val('');
-        						selectAnswer();
-        					};
-        				}
-        			});
-        		}
-        		else{
-        			alertify.alert('장난치지마라');
-        		}
-        	}
-        
-        	function selectAnswer(){
-        		$.ajax({
-        			url : 'answer',
-        			type : 'get',
-        			data : {boardNo : ${board.boardNo}},
-        			success : function(result){
-        				// console.log(result);
-        				
-        				let resultStr = '';
-        				for(let i in result){
-        					resultStr += '<tr>'
-        							   + '<td>' + result[i].answerWriter + '</td>'
-        							   + '<td>' + result[i].answerContent + '</td>'
-        							   + '<td>' + result[i].createDate + '</td>'
-        							   + '</tr>';
-        				}
-        				$('#answer').html(resultStr);
-        			}
-        		});
-        	};
-        	
-        	$(function(){
-        		selectAnswer();
-        	})
-        	
-        </script>
-        -->
-                    
-                    
                     <script>
+                	
                     
-                    function selectAnswerList(){
-                    	$.ajax({
-                    		url : 'answer',
-                    		type : 'get',
-                    		data : {boardNo : ${ board.boardNo }},
-                    		success : function(result){
-                    			let resultStr = '';
-     						   console.log(answerWriter);
+            		// 댓글 
 
-                    			for(let i in result){
-                    				resultStr += '<tr>'
-                    						   + '<td id="answerWriter">' + result[i].answerWriter + '</td>'
-                    						   + '<td id="answerContent2"><pre id="preA">' + result[i].answerContent + '</pre></td>'
-                    						   + '<td id="answercreateDate">' + result[i].createDate + '</td>'
-                    						   + '</tr>'
-                    						   
-                    			};
-                    			$('#answer').html(resultStr);
-                    		}
-                    	});
-                    }
-
-                    function insertAnswer(){
-        				$.ajax({
-        					url : 'answer',
-        					type : 'post',
-        					data : {
-        						answerContent : $('#answerContent').val(),
-        						boardNo : ${ board.boardNo }
-        					},
-        					success : function(result){
-        						if(result == 'success'){
-        							$('#answerContent').val('');
-        							selectAnswerList();
-        						};
-        					}
-        				});
-        			}
+            		function insertAnswer(){
+            			$.ajax({
+            				url : 'answer',
+            				type : 'post',
+            				data : {
+            					answerContent : $('#answerContent').val(),
+            					boardNo : ${board.boardNo},
+            					answerWriter : '${ loginUser.memberNo }'
+            				},
+            		        success: function(result){
+            		            if(result == 'success'){
+            		                $('#answerContent').val('');
+            		                selectAnswerList(); // 댓글 목록 다시 불러오기
+            		            } else{
+            		            	alert('댓글 작성 실패');
+            		            }
+            				}
+            			});
+            		}
+            		
+					function selectAnswerList(){
+					    $.ajax({
+					        url: 'answer',
+					        type: 'GET',
+					        data: {boardNo : ${board.boardNo}},
+					        success: function(result){
+					            let resultStr = '';
+					            
+					            console.log(result);
+					            
+					            if (result && result.length > 0) {
+					                for(let i = 0; i < result.length; i++){
+					                    resultStr += '<tr>'
+					                               + '<td id="answerWriter"> 관리자 </td>'
+					                               + '<td id="answerContent2"><pre id="preA">' + result[i].answerContent + '</pre></td>'
+					                               + '<td id="answercreateDate">' + result[i].createDate + '</td>'
+					                               + '</tr>';
+					                }
+					            } else {
+					                resultStr = '<tr><td colspan="3">댓글이 없습니다.</td></tr>';
+					            }
+					            
+					            $('.detail-a tbody').html(resultStr); // 결과를 화면에 출력
+					        }
+					    });
+					}
                     </script>
-                   
-                </div>
+
             </div> <!-- notice-content -->
                 <div class="notice-btn" align="center">
                     <button class="board-detail-btn" onclick="backPage();">목록</button>
@@ -499,8 +453,7 @@
                     });
                 }
     		}
-
-    	
+			
     	</script>
     
 </body>

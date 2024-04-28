@@ -113,7 +113,7 @@ public class BoardController {
 	
 	@ResponseBody
 	@GetMapping(value="answer", produces="application/json; charset=UTF-8")
-	public String selectAnswer(int boardNo) {
+	public String selectAnswerList(int boardNo) {
 		return new Gson().toJson(boardService.selectAnswer(boardNo));
 	}
 	

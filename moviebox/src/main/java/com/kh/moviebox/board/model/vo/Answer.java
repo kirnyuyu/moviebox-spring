@@ -15,6 +15,5 @@ public class Answer {
 	private String createDate;
 	private String status;
 	private int boardNo;
-	private String answerWriter;
-
+	private int answerWriter;
 }

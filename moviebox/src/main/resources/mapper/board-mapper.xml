@@ -22,6 +22,13 @@
 		<result column="CATEGORY_NO"	property="categoryNo"/>
 		<result column="CATEGORY_NAME"	property="categoryName"/>
 	</resultMap>
+	
+	<resultMap type="answer" id="answerResultSet">
+		<result column="ANSWER_NO"	property="answerNo"/>
+		<result column="ANSWER_CONTENT"	property="answerContent"/>
+		<result column="BOARD_NO"	property="boardNo"/>
+		<result column="ANSWER_WRITER"	property="answerWriter"/>
+	</resultMap>
 
 	<select id="selectListCount" resultType="_int">
 		SELECT
@@ -145,12 +152,13 @@
 	</update>
 	
 	
-	<select id="selectAnswer" resultType="answer" parameterType="_int">
+	<select id="selectAnswer" resultMap="answerResultSet" parameterType="_int">
 		SELECT
-			  ANSWER_NO answerNo,
-			  ANSWER_CONTENT answerContent,
-			  TO_CHAR(CREATE_DATE, 'YY/MM/DD') CREATE_DATE createDate,
-			  MEMBER_NAME answerWriter
+			  BOARD_NO,
+			  ANSWER_NO,
+			  ANSWER_CONTENT,
+			  TO_CHAR(CREATE_DATE, 'YY/MM/DD') CREATE_DATE,
+			  ANSWER_WRITER
 		  FROM
 		  	  TB_ANSWER A
 		  JOIN
@@ -172,14 +180,16 @@
   	 	  	  ANSWER_NO,
   	 	  	  ANSWER_CONTENT,
   	 	  	  BOARD_NO,
-  	 	  	  ANSWER_WRITER
+  	 	  	  ANSWER_WRITER,
+  	 	  	  CREATE_DATE
   	 	  	  )
 		VALUES
 			  (
 			  SEQ_ANSNO.NEXTVAL,
 			  #{answerContent},
 			  #{boardNo},
-			  #{answerWriter}
+			  #{answerWriter},
+			  SYSDATE
 			  )
 	</insert>
 
